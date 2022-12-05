@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+  *,
+*:before,
+*:after {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+html {
+font-size: 100%;
+}
+
+body {
+width: 100%;
+height: 100vh;
+overflow: hidden;
+display: grid;
+place-items: center;
+background: rgb(12, 141, 195);
+font-family: "Lato", sans-serif;
+font-weight: 400;
+line-height: 1.75;
+}
+
+p {
+margin-bottom: 1rem;
+}
+
+h1{
+  background: rgb(11, 108, 161);
+  color: white;
+  font-size: 27px;
+  text-align: center;
+  margin-top: -17px;
+  margin-left: -17px;
+  margin-right: -17px;
+}
+.h3 {
+margin: 1.38rem 0;
+font-size: 1.424rem;
+}
+
+#tip-calculator {
+width: 80%;
+max-width: 350px;
+padding: 1rem;
+background: white;
+border-radius: 0.3rem;
+
+}
+
+#output {
+text-align: center;
+box-shadow: 0 0 20px rgba(0,139,253,0.25);
+padding: 10px;
+color: rgb(9, 73, 171);
+}
+
+form {
+border-top: 1px solid hsl(149, 31%, 25%);
+}
+
+label {
+display: block;
+}
+
+input[type="number"] {
+width: 100%;
+max-width: 4em;
+background: none;
+border: none;
+font-size: 20px;
+color: rgb(26, 64, 237);
+border-bottom: 1px dashed black;
+
+/* Hide spinners and steppers - Firefox */
+-moz-appearance: textfield;
+}
+
+/* Hide spinners and steppers - Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+#people {
+max-width: 3em;
+}
+
+#percentage {
+-webkit-appearance: none;
+width: 100%;
+margin: 2rem 0;
+height: 10px;
+background: hsl(193, 94%, 34%);
+border-radius: 3px;
+}
+
+#percentage::-webkit-slider-thumb {
+-webkit-appearance: none;
+appearance: none;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+border: 2px solid rgb(5, 47, 156);
+background: hsl(255, 14%, 66%);
+cursor: pointer;
+}
+
+#percentage::-moz-range-thumb {
+width: 20px;
+height: 20px;
+background: hsl(149, 31%, 98%);
+border-radius: 50%;
+cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+  <div id="tip-calculator">
+    <h1>Tip Calculator</h1>
+
+    <form id="form">
+      <label for="bill" class="h3">
+        Bill: $
+        <input type="number" min="0" step="0.01" value="50" name="bill" id="bill" />
+      </label>
+      <label for="people" class="h3">
+        People:
+        <input type="number" min="1" step="1" value="1" name="people" id="people" />
+      </label>
+      <label for="percentage" class="h3">
+        Tip Percentage:
+        <span id="percentage-output"></span>
+        <input type="range" min="0" max="100" step="1" value="20" name="percentage" id="percentage" />
+      </label>
+    </form>
+    <div id="output" class="h3"></div>
+  </div>
+
+  <script type="text/javascript">
+  // cached elements ==========
+  const form = document.getElementById("form");
+  const totalBill = document.getElementById("bill");
+  const totalPeople = document.getElementById("people");
+  const tipPercentage = document.getElementById("percentage");
+  const percentageOutput = document.getElementById("percentage-output");
+  const output = document.getElementById("output");
+
+  // event listeners ==========
+  form.addEventListener("change", calculateTip);
+  tipPercentage.oninput = calculateTip;
+
+  // event handlers ==========
+  function calculateTip() {
+    const dollarsPerPerson = (
+      (totalBill.value * (tipPercentage.value / 100)) /
+      totalPeople.value
+    ).toFixed(2);
+
+    displayTip(`$${dollarsPerPerson}`);
+    displayPercentage();
+  }
+
+  // helper functions ==========
+  function displayTip(totalPerPerson) {
+    output.innerText =
+      totalPeople.value > 1
+        ? `Each person should tip ${totalPerPerson}`
+        : `You should tip ${totalPerPerson}`;
+  }
+
+  function displayPercentage() {
+    percentageOutput.innerText = `${tipPercentage.value}%`;
+  }
+
+  // on load ==========
+  calculateTip();
+
+  </script>
+</body>
+</html>
